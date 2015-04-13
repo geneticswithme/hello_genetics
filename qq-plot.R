@@ -14,3 +14,12 @@ plot ( c(0,7), c(0,7),col = 'red', lwd =3, type = 'l', xlab = "expected (-logP)"
 	ylab = "Observed (-logP)", xlim = c(0,7), ylim = c(0,7), las = 1, xaxs = "i", bty = "l")
 points( log_expected_p, log_observed_p, pch =20, cex = 0.5)
 dev.off()
+
+
+#计算genomic control的Inflation λ。
+res_p <- observed_p[which(!is.na(observed_p))]
+library (snpStats)
+pdf (qq_plot2.pdf)
+qq.chisq (-2 * log (res_p), df=2, pvals = TRUE, overdisp = FALSE, thin = c(0.8, 1000))# full model test，df=2
+#屏幕打印出lambda的结果
+dev.off()
