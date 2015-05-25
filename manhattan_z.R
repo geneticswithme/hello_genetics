@@ -10,7 +10,7 @@
 
 
 
-manhattan <- function(dataframe, colors=c("gray10", "gray50"), ymax="max", suggestiveline=-log10(1e-5), genomewideline=-log10(5e-8), annotate=NULL, ...) {
+manhattan <- function(dataframe, colors=c("gray10", "gray50"), ymax="max", suggestiveline=5, genomewideline=8, annotate=NULL, ...) {
 
     d=dataframe
     if (!("CHR" %in% names(d) & "BP" %in% names(d) & "P" %in% names(d))) stop("Make sure your data frame contains columns CHR, BP, and P")
@@ -25,7 +25,6 @@ manhattan <- function(dataframe, colors=c("gray10", "gray50"), ymax="max", sugge
     numchroms=length(unique(d$CHR))
 	colors <- rep(colors,numchroms)[1:numchroms]
     if (ymax=="max") ymax<-ceiling(max(d$logp))
-    if (ymax<8) ymax<-8
     
     if (numchroms==1) {
         d$pos=d$BP
