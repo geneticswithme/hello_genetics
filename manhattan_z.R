@@ -22,6 +22,12 @@ manhattan <- function(dataframe, colors=c("gray10", "gray50"), ymax="max", sugge
     ticks=NULL
     lastbase=0
     chrnames=unique(d$CHR)
+	options(warn=-1)
+	chr.lev<-levels(chrnames)
+	chr.num<-sort(as.numeric(chr.lev))
+	chr.char<-sort(chr.lev[!(chr.lev%in%chr.num)])
+	chrnames<-factor(chrnames,levels=c(chr.num,chr.char))
+	chrnames<-sort(chrnames)
     numchroms=length(unique(d$CHR))
 	colors <- rep(colors,numchroms)[1:numchroms]
     if (ymax=="max") ymax<-ceiling(max(d$logp))
