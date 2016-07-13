@@ -1,5 +1,5 @@
 #主要是gettinggeneticsdone(blogspot)的manhattanplot的Rscript，zyy对其稍加修改，可联系yyzhang@cau.edu.cn
-#改动后，CHR可以为连续或不连续的数值或字符。
+#
 #使用方法
 #对plink的关联分析结果做manhattan图
 #plink --file input --assoc 生成的plink.assoc
@@ -13,22 +13,17 @@
 manhattan <- function(dataframe, colors=c("gray10", "gray50"), ymax="max", suggestiveline=5, genomewideline=8, annotate=NULL, ...) {
 
     d=dataframe
+  
     if (!("CHR" %in% names(d) & "BP" %in% names(d) & "P" %in% names(d))) stop("Make sure your data frame contains columns CHR, BP, and P")
-    
     d=d[d$CHR!=0, ]
-    d=subset(na.omit(d[order(d$CHR, d$BP), ]), (P>0 & P<=1)) # remove na's, sort, and keep only 0<P<=1
+    d=subset(na.omit(d), (P>0 & P<=1)) # remove na's, sort, and keep only 0<P<=1
     d$logp = -log10(d$P)
     d$pos=NA
     ticks=NULL
     lastbase=0
     chrnames=unique(d$CHR)
-	options(warn=-1)
-	chr.lev<-levels(chrnames)
-	chr.num<-sort(as.numeric(chr.lev))
-	chr.char<-sort(chr.lev[!(chr.lev%in%chr.num)])
-	chrnames<-factor(chrnames,levels=c(chr.num,chr.char))
-	chrnames<-sort(chrnames)
     numchroms=length(unique(d$CHR))
+
 	colors <- rep(colors,numchroms)[1:numchroms]
     if (ymax=="max") ymax<-ceiling(max(d$logp))
     
